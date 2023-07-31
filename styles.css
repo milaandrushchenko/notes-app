@@ -33,3 +33,9 @@ td,th {
 .create-note{
     border: 1px solid black;
 }
+
+/* styles.css */
+.invalid {
+    border-color: red;
+    /* або інший стиль, який ви хочете застосувати */
+}

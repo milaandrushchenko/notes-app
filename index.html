@@ -13,33 +13,71 @@
 <body>
     <div class="container">
         <div class="container mb-3">
-            <table class="table table-borderless" id="notesTable">
-                <thead >
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col" class="text-white">Name</th>
-                            <th scope="col" class="text-white">Created</th>
-                            <th scope="col" class="text-white">Category</th>
-                            <th scope="col" class="text-white">Content</th>
-                            <th scope="col" class="text-white">Dates</th>
-                            <th scope="col" class="text-white"><button class="btn" onclick="archiveAll()">
-                                <i class="fa-solid fa-xl fa-box-archive""></i>
-                            </button>
-                            <button class="btn" onclick="deleteAll()">
-                                <i class="fa-solid fa-xl white fa-trash""></i>
-                            </button></th>
-                        </tr>
-                </thead>
-                <tbody >
-                   
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-borderless " id="notesTable">
+                    <thead >
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col" class="text-white">Name</th>
+                                <th scope="col" class="text-white">Created</th>
+                                <th scope="col" class="text-white">Category</th>
+                                <th scope="col" class="text-white">Content</th>
+                                <th scope="col" class="text-white">Dates</th>
+                                <th scope="col" class="text-white">
+                                    <button class="btn" onclick="archiveAll()">
+                                        <i class="fa-solid fa-xl fa-box-archive""></i>
+                                    </button>
+                                <button class="btn" onclick="deleteAll()">
+                                    <i class="fa-solid fa-xl white fa-trash""></i>
+                                </button></th>
+                            </tr>
+                    </thead>
+                    <tbody >
+                    
+                    </tbody>
+                </table>
+            </div>
             <div class="d-flex justify-content-end">
                 <button type="button" class="btn btn-light create-note">Create Note</button>
             </div>
         </div>
+        
     </div>
-<script type="module" src="index.js"></script>
+
+    <div class="modal fade" id="createNoteModal" tabindex="-1" aria-labelledby="createNoteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createNoteModalLabel">New note</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="note-name" class="col-form-label">Name:</label>
+                                <input type="text" class="form-control" id="note-name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="note-name" class="col-form-label">Categories:</label>
+                                <select class="form-select categories" aria-label="Default select example">
+                                   
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="note-contant" class="col-form-label">Content:</label>
+                                <textarea class="form-control" id="note-content"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveNote">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <script type="module" src="index.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"

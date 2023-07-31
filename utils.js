@@ -29,3 +29,17 @@ export function getIcon(category) {
   }
   return nameIcon;
 }
+
+export function validateForm(noteName, noteCategory, noteContent) {
+  if (!noteName.value || !noteCategory.value || !noteContent.value) {
+    if (!noteName.value) noteName.classList.add("invalid");
+    if (!noteCategory.value) noteCategory.classList.add("invalid");
+    if (!noteContent.value) noteContent.classList.add("invalid");
+    return false;
+  }
+
+  noteName.classList.remove("invalid");
+  noteCategory.classList.remove("invalid");
+  noteContent.classList.remove("invalid");
+  return true;
+}

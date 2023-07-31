@@ -1,4 +1,12 @@
-import { archiveNote, unarchiveNote, editNote, removeNote } from "./notes.js";
+import { categories } from "./data.js";
+import {
+  archiveNote,
+  unarchiveNote,
+  editNote,
+  removeNote,
+  addNote,
+  getAllNotes,
+} from "./notes.js";
 import { getIcon, parseDate, truncateText } from "./utils.js";
 
 export function renderNotesTable(notes) {
@@ -72,8 +80,64 @@ export function renderNotesTable(notes) {
   });
 }
 
+export function createNewNote() {
+  let btnCreateNote = document.querySelector(".create-note");
+
+  let modal = new bootstrap.Modal(
+    document.getElementById("createNoteModal"),
+    {}
+  );
+
+  let selectCategories = document.querySelector(".categories");
+  categories.map((item) => {
+    const option = document.createElement("option");
+    option.textContent = item;
+    selectCategories.appendChild(option);
+  });
+
+  btnCreateNote.addEventListener("click", () => {
+    modal.show();
+  });
+
+  const saveNoteButton = document.querySelector("#saveNote");
+
+  saveNoteButton.addEventListener("click", () => {
+    const noteName = document.querySelector("#note-name");
+    const noteCategory = document.querySelector(".categories");
+    const noteContent = document.querySelector("#note-content");
+
+    const isFormValid = validateForm(noteName, noteCategory, noteContent);
+
+    if (isFormValid) {
+      const newNote = {
+        name: noteName,
+        created: new Date().toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
+        category: noteCategory,
+        content: noteContent,
+      };
+
+      addNote(newNote);
+
+      modal.hide();
+      init();
+    }
+  });
+}
+
 export function renderArchivedNotesTable(archivedNotes) {}
 
 export function renderSummaryTable(summaryData) {}
 
 export function updateSummaryData(notes) {}
+
+export function init() {
+  const notesData = getAllNotes();
+
+  renderNotesTable(notesData);
+
+  updateSummaryData(notesData);
+}

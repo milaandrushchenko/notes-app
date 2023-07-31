@@ -10,13 +10,12 @@ import {
   renderNotesTable,
   renderArchivedNotesTable,
   updateSummaryData,
+  init,
+  createNewNote,
 } from "./dom.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const notesData = getAllNotes();
+  init();
 
-  renderNotesTable(notesData);
-  updateSummaryData(notesData);
-
-  // Додайте обробник подій для кнопок та форми тут
+  createNewNote();
 });

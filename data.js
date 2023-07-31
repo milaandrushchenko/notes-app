@@ -1,4 +1,4 @@
-const notesData = [
+export const notesData = [
   {
     name: "Shopping list",
     created: "April 20, 2021",
@@ -6,71 +6,43 @@ const notesData = [
     content: "Tomatoes, bread",
   },
   {
-    name: "Shopping list",
-    created: "April 20, 2021",
-    category: "Task",
-    content: "Tomatoes, bread",
+    name: "Random idea",
+    created: "May 5, 2021",
+    category: "Idea",
+    content: "Invent a new gadget",
   },
   {
-    name: "Shopping list",
-    created: "April 20, 2021",
+    name: "The dentist",
+    created: "June 10, 2021",
     category: "Task",
-    content: "Tomatoes, bread",
+    content:
+      "I’m gonna have a dentist appointment on the 3/5/2021, I moved it from 5/5/2021.",
   },
   {
-    name: "Shopping list",
-    created: "April 20, 2021",
-    category: "Task",
-    content: "Tomatoes, bread",
+    name: "Book recommendation",
+    created: "July 15, 2021",
+    category: "Random Thought",
+    content: "Read 'To Kill a Mockingbird'",
   },
   {
-    name: "Shopping list",
-    created: "April 20, 2021",
-    category: "Task",
-    content: "Tomatoes, bread",
+    name: "Creative project",
+    created: "August 2, 2021",
+    category: "Idea",
+    content: "Start a blog",
   },
   {
-    name: "Shopping list",
-    created: "April 20, 2021",
+    name: "Birthday gift",
+    created: "September 9, 2021",
     category: "Task",
-    content: "Tomatoes, bread",
+    content: "Buy a present for a friend",
   },
   {
-    name: "Shopping list",
-    created: "April 20, 2021",
-    category: "Task",
-    content: "Tomatoes, bread",
-  },
-  {
-    name: "Shopping list",
-    created: "April 20, 2021",
-    category: "Task",
-    content: "Tomatoes, bread",
+    name: "Inspirational quote",
+    created: "October 12, 2021",
+    category: "Random Thought",
+    content:
+      "The future belongs to those who believe in the beauty of their dreams.",
   },
 ];
 
-export function getAllNotes() {
-  return notesData;
-}
-
-export function addNote(note) {
-  // Реалізуйте додавання запису тут
-}
-
-export function editNote(id, updatedNote) {
-  // Реалізуйте редагування запису тут
-}
-
-export function archiveNote(id) {
-  // Реалізуйте архівацію запису тут
-}
-
-export function unarchiveNote(id) {
-  // Реалізуйте розархівацію запису тут
-}
-
-export function removeNote(id) {
-  // Реалізуйте видалення запису тут
-}
-
-export default notesData;
+export const categories = ["Task", "Random Thought", "Idea"];
