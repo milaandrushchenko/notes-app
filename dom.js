@@ -6,8 +6,15 @@ import {
   removeNote,
   addNote,
   getAllNotes,
+  removeAllNotes,
 } from "./notes.js";
-import { getIcon, parseDate, truncateText } from "./utils.js";
+import {
+  generateUUID,
+  getIcon,
+  parseDate,
+  truncateText,
+  validateForm,
+} from "./utils.js";
 
 export function renderNotesTable(notes) {
   const tableBody = document.querySelector("#notesTable tbody");
@@ -67,10 +74,10 @@ export function renderNotesTable(notes) {
     actionsCell.appendChild(archiveButton);
 
     const deleteButton = document.createElement("button");
-    deleteButton.classList.add("btn");
+    deleteButton.classList.add("btn", "delete-button");
     deleteButton.innerHTML =
       '<i class="fa-solid fa-xl fa-trash" style="color: #7a7a7a;"></i>';
-    deleteButton.setAttribute("onclick", `deleteItem(${note.id})`);
+    deleteButton.setAttribute("data-note-id", note.id);
     actionsCell.appendChild(deleteButton);
 
     row.appendChild(actionsCell);
@@ -110,19 +117,46 @@ export function createNewNote() {
 
     if (isFormValid) {
       const newNote = {
-        name: noteName,
+        id: generateUUID(),
+        name: noteName.value,
         created: new Date().toLocaleDateString("en-US", {
           year: "numeric",
           month: "long",
           day: "numeric",
         }),
-        category: noteCategory,
-        content: noteContent,
+        category: noteCategory.value,
+        content: noteContent.value,
       };
+      console.log(newNote);
 
       addNote(newNote);
 
       modal.hide();
+      init();
+    }
+  });
+}
+
+export function deleteNote() {
+  const tableBody = document.querySelector("#notesTable tbody");
+
+  tableBody.addEventListener("click", (event) => {
+    const deleteButton = event.target.closest(".delete-button");
+
+    if (deleteButton) {
+      const noteId = deleteButton.getAttribute("data-note-id");
+      removeNote(noteId);
+      init();
+    }
+  });
+
+  const deleteAllButton = document.querySelector(".delete-all-button");
+  deleteAllButton.addEventListener("click", () => {
+    const confirmDeleteAll = confirm(
+      "Are you sure you want to delete all notes?"
+    );
+    if (confirmDeleteAll) {
+      removeAllNotes();
       init();
     }
   });

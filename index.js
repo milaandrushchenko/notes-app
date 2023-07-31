@@ -12,10 +12,12 @@ import {
   updateSummaryData,
   init,
   createNewNote,
+  deleteNote,
 } from "./dom.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   init();
 
   createNewNote();
+  deleteNote();
 });

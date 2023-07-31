@@ -30,6 +30,31 @@ export function getIcon(category) {
   return nameIcon;
 }
 
+export function generateUUID() {
+  let uuid = "";
+  const characters = "abcdef0123456789";
+  const length = 32;
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    uuid += characters[randomIndex];
+  }
+
+  // Додаємо дефіси у відповідних місцях, щоб отримати формат UUID
+  uuid =
+    uuid.substr(0, 8) +
+    "-" +
+    uuid.substr(8, 4) +
+    "-" +
+    uuid.substr(12, 4) +
+    "-" +
+    uuid.substr(16, 4) +
+    "-" +
+    uuid.substr(20);
+
+  return uuid;
+}
+
 export function validateForm(noteName, noteCategory, noteContent) {
   if (!noteName.value || !noteCategory.value || !noteContent.value) {
     if (!noteName.value) noteName.classList.add("invalid");
