@@ -68,3 +68,8 @@ export function validateForm(noteName, noteCategory, noteContent) {
   noteContent.classList.remove("invalid");
   return true;
 }
+
+export const modal = new bootstrap.Modal(
+  document.getElementById("createNoteModal"),
+  {}
+);

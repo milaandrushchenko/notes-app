@@ -7,14 +7,22 @@ import {
   addNote,
   getAllNotes,
   removeAllNotes,
+  getNote,
 } from "./notes.js";
 import {
   generateUUID,
   getIcon,
+  modal,
   parseDate,
   truncateText,
   validateForm,
 } from "./utils.js";
+
+let currentNote = null;
+// const modal = new bootstrap.Modal(
+//   document.getElementById("createNoteModal"),
+//   {}
+// );
 
 export function renderNotesTable(notes) {
   const tableBody = document.querySelector("#notesTable tbody");
@@ -60,17 +68,17 @@ export function renderNotesTable(notes) {
     const actionsCell = document.createElement("td");
 
     const editButton = document.createElement("button");
-    editButton.classList.add("btn");
+    editButton.classList.add("btn", "edit-button");
     editButton.innerHTML =
       '<i class="fa-solid fa-xl fa-pen" style="color: #7a7a7a;"></i>';
-    editButton.setAttribute("onclick", `editItem(${note.id})`);
+    editButton.setAttribute("data-note-id", note.id);
     actionsCell.appendChild(editButton);
 
     const archiveButton = document.createElement("button");
-    archiveButton.classList.add("btn");
+    archiveButton.classList.add("btn", "archive-button");
     archiveButton.innerHTML =
       '<i class="fa-solid fa-xl fa-box-archive" style="color: #7a7a7a;"></i>';
-    archiveButton.setAttribute("onclick", `archiveItem(${note.id})`);
+    archiveButton.setAttribute("data-note-id", note.id);
     actionsCell.appendChild(archiveButton);
 
     const deleteButton = document.createElement("button");
@@ -90,49 +98,31 @@ export function renderNotesTable(notes) {
 export function createNewNote() {
   let btnCreateNote = document.querySelector(".create-note");
 
-  let modal = new bootstrap.Modal(
-    document.getElementById("createNoteModal"),
-    {}
-  );
-
-  let selectCategories = document.querySelector(".categories");
-  categories.map((item) => {
-    const option = document.createElement("option");
-    option.textContent = item;
-    selectCategories.appendChild(option);
-  });
+  showCategories();
 
   btnCreateNote.addEventListener("click", () => {
     modal.show();
   });
+}
 
-  const saveNoteButton = document.querySelector("#saveNote");
+export function updateNote() {
+  const tableBody = document.querySelector("#notesTable tbody");
 
-  saveNoteButton.addEventListener("click", () => {
-    const noteName = document.querySelector("#note-name");
-    const noteCategory = document.querySelector(".categories");
-    const noteContent = document.querySelector("#note-content");
+  const noteName = document.querySelector("#note-name");
+  const noteContent = document.querySelector("#note-content");
 
-    const isFormValid = validateForm(noteName, noteCategory, noteContent);
+  tableBody.addEventListener("click", (event) => {
+    const editButton = event.target.closest(".edit-button");
 
-    if (isFormValid) {
-      const newNote = {
-        id: generateUUID(),
-        name: noteName.value,
-        created: new Date().toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        }),
-        category: noteCategory.value,
-        content: noteContent.value,
-      };
-      console.log(newNote);
+    if (editButton) {
+      const noteId = editButton.getAttribute("data-note-id");
 
-      addNote(newNote);
+      currentNote = getNote(noteId);
 
-      modal.hide();
-      init();
+      noteName.value = currentNote.name;
+      noteContent.value = currentNote.content;
+
+      modal.show();
     }
   });
 }
@@ -174,4 +164,66 @@ export function init() {
   renderNotesTable(notesData);
 
   updateSummaryData(notesData);
+}
+
+export function saveNote() {
+  const saveNoteButton = document.querySelector("#saveNote");
+
+  saveNoteButton.addEventListener("click", () => {
+    const noteName = document.querySelector("#note-name");
+    const noteCategory = document.querySelector(".categories");
+    const noteContent = document.querySelector("#note-content");
+
+    const isFormValid = validateForm(noteName, noteCategory, noteContent);
+
+    if (isFormValid) {
+      if (currentNote) {
+        const updatedNote = {
+          name: noteName.value,
+          category: noteCategory.value,
+          content: noteContent.value,
+        };
+        console.log("edit");
+        editNote(currentNote.id, updatedNote);
+      } else {
+        const newNote = {
+          id: generateUUID(),
+          name: noteName.value,
+          created: new Date().toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          }),
+          category: noteCategory.value,
+          content: noteContent.value,
+        };
+        console.log("create");
+        addNote(newNote);
+      }
+
+      modal.hide();
+      init();
+    }
+    currentNote = null;
+  });
+}
+
+export function clearNoteForm() {
+  const noteName = document.querySelector("#note-name");
+  const noteContent = document.querySelector("#note-content");
+  noteName.value = "";
+  noteContent.value = "";
+}
+
+function showCategories() {
+  let selectCategories = document.querySelector(".categories");
+  selectCategories.innerHTML = "";
+  categories.map((item) => {
+    const option = document.createElement("option");
+    if (currentNote && item === currentNote.category) {
+      option.setAttribute("selected", true);
+    }
+    option.textContent = item;
+    selectCategories.appendChild(option);
+  });
 }

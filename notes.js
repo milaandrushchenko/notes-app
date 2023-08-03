@@ -8,7 +8,23 @@ export function addNote(note) {
   notesData.push(note);
 }
 
-export function editNote(id, updatedNote) {}
+export function editNote(id, updatedNote) {
+  const index = notesData.findIndex((note) => note.id === id);
+
+  if (index !== -1) {
+    notesData[index] = {
+      ...notesData[index],
+      ...updatedNote,
+    };
+  } else {
+    console.log("Note with the specified id not found.");
+  }
+}
+
+export function getNote(id) {
+  let note = notesData.find((note) => note.id == id);
+  return note;
+}
 
 export function archiveNote(id) {}
 
