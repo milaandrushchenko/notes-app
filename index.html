@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,28 +8,39 @@
     <title>Notes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="styles.css" >
+    <link rel="stylesheet" type="text/css" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
-    <div class="container">
-        <div class="container mb-3">
+    <div class="container mt-3">
+        <div class="container">
+            <div class="d-flex justify-content-start radio">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="notesType" id="activeNotes" checked>
+                    <label class="form-check-label" for="activeNotes">Active Notes</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="notesType" id="archivedNotes">
+                    <label class="form-check-label" for="archivedNotes">Archived Notes</label>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-borderless " id="notesTable">
-                    <thead >
-                            <tr>
-                                <th scope="col"></th>
-                                <th scope="col" class="text-white">Name</th>
-                                <th scope="col" class="text-white">Created</th>
-                                <th scope="col" class="text-white">Category</th>
-                                <th scope="col" class="text-white">Content</th>
-                                <th scope="col" class="text-white">Dates</th>
-                                <th scope="col" class="text-white">
-                                    <button class="btn" onclick="archiveAll()">
-                                        <i class="fa-solid fa-xl fa-box-archive""></i>
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col" class="text-white">Name</th>
+                            <th scope="col" class="text-white">Created</th>
+                            <th scope="col" class="text-white">Category</th>
+                            <th scope="col" class="text-white">Content</th>
+                            <th scope="col" class="text-white">Dates</th>
+                            <th scope="col" class="text-white">
+                                <button class="btn archive-all-button">
+                                    <i class="fa-solid fa-xl fa-box-archive""></i>
                                     </button>
-                                <button class="btn delete-all-button">
-                                    <i class="fa-solid fa-xl white fa-trash""></i>
+                                <button class=" btn delete-all-button">
+                                        <i class="fa-solid fa-xl white fa-trash""></i>
                                 </button></th>
                             </tr>
                     </thead>
@@ -37,45 +49,63 @@
                     </tbody>
                 </table>
             </div>
-            <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-light create-note">Create Note</button>
+            <div class=" d-flex justify-content-end">
+                                            <button type="button" class="btn btn-light create-note">Create Note</button>
             </div>
         </div>
-        
+        <div class="container">
+            <div class="table-responsive">
+                <table class="table table-borderless " id="summaryTable">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col" class="text-white">Note Category</th>
+                            <th scope="col" class="text-white">Active</th>
+                            <th scope="col" class="text-white">Archived</th>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <div class="modal fade" id="createNoteModal" tabindex="-1" aria-labelledby="createNoteModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="createNoteModalLabel">New note</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="noteForm">
-                            <div class="mb-3">
-                                <label for="note-name" class="col-form-label">Name:</label>
-                                <input type="text" class="form-control" id="note-name">
-                            </div>
-                            <div class="mb-3">
-                                <label for="note-name" class="col-form-label">Categories:</label>
-                                <select class="form-select categories" aria-label="Default select example">
-                                   
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="note-contant" class="col-form-label">Content:</label>
-                                <textarea class="form-control" id="note-content"></textarea>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="saveNote">Save</button>
-                    </div>
+    </div>
+
+    <div class="modal fade" id="createNoteModal" tabindex="-1" aria-labelledby="createNoteModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createNoteModalLabel">New note</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="noteForm">
+                        <div class="mb-3">
+                            <label for="note-name" class="col-form-label">Name:</label>
+                            <input type="text" class="form-control" id="note-name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="note-name" class="col-form-label">Categories:</label>
+                            <select class="form-select categories" aria-label="Default select example">
+
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="note-contant" class="col-form-label">Content:</label>
+                            <textarea class="form-control" id="note-content"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveNote">Save</button>
                 </div>
             </div>
         </div>
+    </div>
 
     <script type="module" src="index.js"></script>
 
@@ -86,4 +116,5 @@
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>
 </body>
+
 </html>

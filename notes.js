@@ -1,7 +1,11 @@
 import { categories, notesData } from "./data.js";
 
-export function getAllNotes() {
-  return notesData;
+export function getActiveNotes() {
+  return notesData.filter((note) => !note.archived);
+}
+
+export function getArchivedNotes() {
+  return notesData.filter((note) => note.archived);
 }
 
 export function addNote(note) {
@@ -26,9 +30,25 @@ export function getNote(id) {
   return note;
 }
 
-export function archiveNote(id) {}
+export function archiveNote(id) {
+  const noteIndex = notesData.findIndex((note) => note.id === id);
+  if (noteIndex !== -1) {
+    notesData[noteIndex].archived = !notesData[noteIndex].archived;
+  }
+}
 
-export function unarchiveNote(id) {}
+export function archiveAllNote() {
+  notesData.map((note) => {
+    note.archived = true;
+  });
+}
+
+export function unarchiveNote(id) {
+  const noteIndex = notesData.findIndex((note) => note.id === id);
+  if (noteIndex !== -1) {
+    notesData[noteIndex].archived = false;
+  }
+}
 
 export function removeNote(id) {
   let noteDel = notesData.find((note, index) => note.id == id);
@@ -38,4 +58,28 @@ export function removeNote(id) {
 
 export function removeAllNotes() {
   notesData.splice(0, notesData.length);
+}
+
+export function getCategoryStats() {
+  const categoryStats = {};
+
+  notesData.forEach((note) => {
+    const category = note.category;
+    if (categoryStats.hasOwnProperty(category)) {
+      categoryStats[category].totalNotes += 1;
+      if (note.archived) {
+        categoryStats[category].archivedNotes += 1;
+      } else {
+        categoryStats[category].activeNotes += 1;
+      }
+    } else {
+      categoryStats[category] = {
+        totalNotes: 1,
+        activeNotes: note.archived ? 0 : 1,
+        archivedNotes: note.archived ? 1 : 0,
+      };
+    }
+  });
+
+  return categoryStats;
 }
