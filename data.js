@@ -7,6 +7,7 @@ export const notesData = [
     created: "April 20, 2021",
     category: "Task",
     content: "Tomatoes, bread",
+    archived: false,
   },
   {
     id: generateUUID(),
@@ -14,6 +15,7 @@ export const notesData = [
     created: "May 5, 2021",
     category: "Idea",
     content: "Invent a new gadget",
+    archived: false,
   },
   {
     id: generateUUID(),
@@ -22,6 +24,7 @@ export const notesData = [
     category: "Task",
     content:
       "I’m gonna have a dentist appointment on the 3/5/2021, I moved it from 5/5/2021.",
+    archived: false,
   },
   {
     id: generateUUID(),
@@ -29,6 +32,7 @@ export const notesData = [
     created: "July 15, 2021",
     category: "Random Thought",
     content: "Read 'To Kill a Mockingbird'",
+    archived: false,
   },
   {
     id: generateUUID(),
@@ -36,6 +40,7 @@ export const notesData = [
     created: "August 2, 2021",
     category: "Idea",
     content: "Start a blog",
+    archived: false,
   },
   {
     id: generateUUID(),
@@ -43,6 +48,7 @@ export const notesData = [
     created: "September 9, 2021",
     category: "Task",
     content: "Buy a present for a friend",
+    archived: true,
   },
   {
     id: generateUUID(),
@@ -51,6 +57,7 @@ export const notesData = [
     category: "Random Thought",
     content:
       "The future belongs to those who believe in the beauty of their dreams.",
+    archived: false,
   },
 ];
 

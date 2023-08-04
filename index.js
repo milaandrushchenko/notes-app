@@ -1,21 +1,21 @@
 import {
-  getAllNotes,
   addNote,
   editNote,
   archiveNote,
-  unarchiveNote,
   removeNote,
+  getArchivedNotes,
 } from "./notes.js";
 import {
   renderNotesTable,
   renderArchivedNotesTable,
-  updateSummaryData,
   init,
   createNewNote,
   deleteNote,
   updateNote,
   saveNote,
   clearNoteForm,
+  handleArchiveNote,
+  handleRadioClick,
 } from "./dom.js";
 import { modal } from "./utils.js";
 
@@ -26,6 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   init();
+
+  handleRadioClick();
+  handleArchiveNote();
 
   createNewNote();
   deleteNote();

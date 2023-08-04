@@ -26,6 +26,8 @@ export function getIcon(category) {
     case "Random Thought":
       nameIcon = "fa-head-side-virus";
       break;
+    default:
+      nameIcon = "fa-cart-shopping";
   }
   return nameIcon;
 }

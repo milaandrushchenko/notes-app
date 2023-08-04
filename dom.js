@@ -1,13 +1,15 @@
 import { categories } from "./data.js";
 import {
   archiveNote,
-  unarchiveNote,
   editNote,
   removeNote,
   addNote,
-  getAllNotes,
+  getActiveNotes,
   removeAllNotes,
   getNote,
+  getArchivedNotes,
+  archiveAllNote,
+  getCategoryStats,
 } from "./notes.js";
 import {
   generateUUID,
@@ -19,10 +21,22 @@ import {
 } from "./utils.js";
 
 let currentNote = null;
-// const modal = new bootstrap.Modal(
-//   document.getElementById("createNoteModal"),
-//   {}
-// );
+
+export function handleRadioClick() {
+  const radio = document.querySelector(".radio");
+
+  radio.addEventListener("click", () => {
+    const activeNotesRadio = event.target.closest("#activeNotes");
+    const archivedNotesRadio = event.target.closest("#archivedNotes");
+
+    if (archivedNotesRadio) {
+      renderArchivedNotesTable(getArchivedNotes());
+    }
+    if (activeNotesRadio) {
+      renderNotesTable(getActiveNotes());
+    }
+  });
+}
 
 export function renderNotesTable(notes) {
   const tableBody = document.querySelector("#notesTable tbody");
@@ -56,7 +70,7 @@ export function renderNotesTable(notes) {
     row.appendChild(categoryCell);
 
     const contentCell = document.createElement("td");
-    contentCell.textContent = truncateText(note.content, 20); // Обмежимо до 30 символів
+    contentCell.textContent = truncateText(note.content, 20);
 
     row.appendChild(contentCell);
 
@@ -93,6 +107,99 @@ export function renderNotesTable(notes) {
     // Додаємо рядок до тіла таблиці
     tableBody.appendChild(row);
   });
+}
+
+export function renderArchivedNotesTable(notes) {
+  const tableBody = document.querySelector("#notesTable tbody");
+
+  // Очищаємо таблицю перед оновленням
+  tableBody.innerHTML = "";
+
+  // Ітеруємося по масиву з записами
+  notes.forEach((note) => {
+    const row = document.createElement("tr");
+    row.classList.add("table-light");
+
+    const iconCell = document.createElement("td");
+    iconCell.innerHTML = `<div class="circle-icon  text-white"><i class="fa-solid fa-lg ${getIcon(
+      note.category
+    )}"></i></div>`;
+    row.appendChild(iconCell);
+
+    const nameCell = document.createElement("th");
+    nameCell.setAttribute("scope", "row");
+    nameCell.textContent = truncateText(note.name, 20);
+    row.appendChild(nameCell);
+
+    const dateCell = document.createElement("td");
+    dateCell.textContent = note.created;
+    row.appendChild(dateCell);
+
+    const categoryCell = document.createElement("td");
+    categoryCell.textContent = note.category;
+    row.appendChild(categoryCell);
+
+    const contentCell = document.createElement("td");
+    contentCell.textContent = truncateText(note.content, 20);
+
+    row.appendChild(contentCell);
+
+    const datesCell = document.createElement("td");
+    datesCell.textContent = truncateText(parseDate(note.content), 20);
+    row.appendChild(datesCell);
+
+    const actionsCell = document.createElement("td");
+
+    const unArchiveButton = document.createElement("button");
+    unArchiveButton.classList.add("btn", "unarchive-button");
+    unArchiveButton.innerHTML =
+      '<i class="fa-solid fa-box-open fa-xl" style="color: #7a7a7a;"></i>';
+    unArchiveButton.setAttribute("data-note-id", note.id);
+    actionsCell.appendChild(unArchiveButton);
+
+    row.appendChild(actionsCell);
+
+    // Додаємо рядок до тіла таблиці
+    tableBody.appendChild(row);
+  });
+}
+
+export function renderSummaryTable() {
+  const tableBody = document.querySelector("#summaryTable tbody");
+
+  // Очищаємо таблицю перед оновленням
+  tableBody.innerHTML = "";
+
+  let categoryStats = getCategoryStats();
+  for (const category in categoryStats) {
+    const stats = categoryStats[category];
+
+    const row = document.createElement("tr");
+    row.classList.add("table-light");
+
+    const iconCell = document.createElement("td");
+    iconCell.innerHTML = `<div class="circle-icon  text-white"><i class="fa-solid fa-lg ${getIcon(
+      category
+    )}"></i></div>`;
+    row.appendChild(iconCell);
+
+    const nameCell = document.createElement("td");
+    nameCell.setAttribute("scope", "row");
+    nameCell.textContent = truncateText(category, 20);
+    row.appendChild(nameCell);
+
+    const activeCount = document.createElement("td");
+    activeCount.setAttribute("scope", "row");
+    activeCount.textContent = stats.activeNotes;
+    row.appendChild(activeCount);
+
+    const archiveCount = document.createElement("td");
+    archiveCount.setAttribute("scope", "row");
+    archiveCount.textContent = stats.archivedNotes;
+    row.appendChild(archiveCount);
+
+    tableBody.appendChild(row);
+  }
 }
 
 export function createNewNote() {
@@ -152,18 +259,54 @@ export function deleteNote() {
   });
 }
 
-export function renderArchivedNotesTable(archivedNotes) {}
+export function handleArchiveNote() {
+  const tableBody = document.querySelector("#notesTable tbody");
 
-export function renderSummaryTable(summaryData) {}
+  tableBody.addEventListener("click", (event) => {
+    const archiveButton = event.target.closest(".archive-button");
+    const unArchiveButton = event.target.closest(".unarchive-button");
 
-export function updateSummaryData(notes) {}
+    if (archiveButton) {
+      const noteId = archiveButton.getAttribute("data-note-id");
+
+      currentNote = getNote(noteId);
+      archiveNote(noteId);
+      init();
+    }
+
+    if (unArchiveButton) {
+      const noteId = unArchiveButton.getAttribute("data-note-id");
+
+      currentNote = getNote(noteId);
+      archiveNote(noteId);
+      init();
+    }
+  });
+
+  const archiveAllButton = document.querySelector(".archive-all-button");
+  archiveAllButton.addEventListener("click", () => {
+    const confirmArchiveAll = confirm(
+      "Are you sure you want to archive all notes?"
+    );
+    if (confirmArchiveAll) {
+      archiveAllNote();
+      init();
+    }
+  });
+}
 
 export function init() {
-  const notesData = getAllNotes();
+  const notesData = getActiveNotes();
 
-  renderNotesTable(notesData);
-
-  updateSummaryData(notesData);
+  const activeNotesRadio = document.querySelector("#activeNotes");
+  const archivedNotesRadio = document.querySelector("#archivedNotes");
+  if (activeNotesRadio.checked) {
+    renderNotesTable(notesData);
+  }
+  if (archivedNotesRadio.checked) {
+    renderArchivedNotesTable(getArchivedNotes());
+  }
+  renderSummaryTable();
 }
 
 export function saveNote() {
@@ -196,6 +339,7 @@ export function saveNote() {
           }),
           category: noteCategory.value,
           content: noteContent.value,
+          archived: false,
         };
         console.log("create");
         addNote(newNote);
